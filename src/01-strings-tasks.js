@@ -202,8 +202,47 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+
+const LINES = {
+  upLeftAngle: String.fromCharCode('0x250C'),
+  horizontalLine: String.fromCharCode('0x2500'),
+  verticalLine: String.fromCharCode('0x2502'),
+  upRightAngle: String.fromCharCode('0x2510'),
+  downLeftAngle: String.fromCharCode('0x2514'),
+  downRightAngle: String.fromCharCode('0x2518'),
+};
+
+function getRectangleString(width, height) {
+  let result = '';
+  for (let indexHeight = 0; indexHeight < height; indexHeight += 1) {
+    for (let indexWidth = 0; indexWidth < width; indexWidth += 1) {
+      if (!indexHeight) {
+        if (!indexWidth) {
+          result += LINES.upLeftAngle;
+        } else if (indexWidth === width - 1) {
+          result += LINES.upRightAngle;
+          result += '\n';
+        } else {
+          result += LINES.horizontalLine;
+        }
+      } else if (indexHeight === height - 1) {
+        if (!indexWidth) {
+          result += LINES.downLeftAngle;
+        } else if (indexWidth === width - 1) {
+          result += LINES.downRightAngle;
+          result += '\n';
+        } else {
+          result += LINES.horizontalLine;
+        }
+      } else if ((!indexWidth) || (indexWidth === width - 1)) {
+        result += LINES.verticalLine;
+        if ((indexWidth === width - 1)) {
+          result += '\n';
+        }
+      } else result += ' ';
+    }
+  }
+  return result;
 }
 
 
@@ -240,8 +279,8 @@ function encodeToRot13(/* str */) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  return value instanceof String || typeof value === 'string';
 }
 
 
@@ -269,8 +308,9 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const deck = ['A♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣', 'A♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦', 'A♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥', 'A♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠'];
+  return deck.indexOf(value);
 }
 
 
